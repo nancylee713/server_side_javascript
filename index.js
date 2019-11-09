@@ -54,6 +54,25 @@ app.post('/api/v1/papers', (req, res) => {
     });
 });
 
+app.post('/api/v1/footnotes', (req, res) => {
+  const footnote = req.body;
+
+  for (let requiredParameter of ['note', 'paper_id']) {
+    if (!footnote[requiredParameter]) {
+      return res.status(422)
+                .send({ error: `Expected format: { note: <String>, paper_id: <Integer>. You're missing a ${requiredParameter} property.}` });
+    }
+  }
+
+  database('footnotes').insert(footnote, 'id')
+    .then(footnote => {
+      res.status(201).json({ id: footnote[0] })
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
