@@ -15,6 +15,16 @@ app.get('/', (req, res) => {
   res.send('Hello, publications');
 })
 
+app.get('/api/v1/papers', (req, res) => {
+  database('papers').select()
+    .then((papers) => {
+      res.status(200).json(papers);
+    })
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
