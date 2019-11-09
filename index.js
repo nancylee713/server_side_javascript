@@ -73,6 +73,23 @@ app.post('/api/v1/footnotes', (req, res) => {
     });
 });
 
+// Retrieve a single record
+app.get('/api/v1/papers/:id', (req, res) => {
+  database('papers').where('id', req.params.id).select()
+    .then(papers => {
+      if (papers.length) {
+        res.status(200).json(papers);
+      } else {
+        res.status(404).json({
+          error: `Could not find paper with id ${req.params.id}`
+        });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
