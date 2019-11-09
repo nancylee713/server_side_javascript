@@ -90,6 +90,23 @@ app.get('/api/v1/papers/:id', (req, res) => {
     });
 });
 
+// Retrieve a single footnote
+app.get('/api/v1/footnotes/:id', (req, res) => {
+  database('footnotes').where('id', req.params.id).select()
+    .then(footnotes => {
+      if (footnotes.length) {
+        res.status(200).json(footnotes);
+      } else {
+        res.status(404).json({
+          error: `Could not find footnote with id ${req.params.id}`
+        });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ error });
+    });
+});
+
 app.listen(app.get('port'), () => {
   console.log(`${app.locals.title} is running on ${app.get('port')}.`);
 });
